@@ -45,6 +45,13 @@ async function createTable() {
                 grade VARCHAR(10)
             )
         `);
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS lesson_hours (
+                id SERIAL PRIMARY KEY,
+                start_time TIME NOT NULL,
+                end_time TIME NOT NULL
+            )
+        `)
         console.log('Table "djurnal" created successfully.');
     } catch (error) {
         console.error('Error creating table:', error);
