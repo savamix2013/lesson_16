@@ -14,6 +14,11 @@ async function main() {
 
         const res = await client.query('SELECT NOW() as ttt');
         console.log(res.rows[0]); // Assuming you want to log the result
+
+        await createTable(); // Create table if it doesn't exist
+
+        await insertData(client); // Insert sample data into the table
+
     } catch (error) {
         console.error('Error executing query:', error);
     } finally {
@@ -48,6 +53,26 @@ async function createTable() {
     }
 }
 
-createTable();
+async function insertData(client) {
+    try {
+        const data = [
+            { student_id: 1, subject: 'Math', grade: 'A' },
+            { student_id: 2, subject: 'History', grade: 'B' },
+            { student_id: 3, subject: 'Science', grade: 'C' }
+        ];
+
+        for (const item of data) {
+            await client.query(`
+                INSERT INTO djurnal (student_id, subject, grade)
+                VALUES ($1, $2, $3)
+            `, [item.student_id, item.subject, item.grade]);
+        }
+
+        console.log('Sample data inserted into "djurnal" table successfully.');
+
+    } catch (error) {
+        console.error('Error inserting data:', error);
+    }
+}
 
 main().catch(console.error);
